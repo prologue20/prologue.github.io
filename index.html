@@ -2,9 +2,107 @@
 <html>
 <head>
   <title>My GitHub Pages Site</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    /* Add some basic styling to the top bar */
+    .top-bar {
+      background-color: #333;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+    }
+    .top-bar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+    }
+    .top-bar li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+    .top-bar a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .top-bar a:hover {
+      color: #ccc;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: #fff;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {
+      background-color: #444;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
 </head>
 <body>
+  <div class="top-bar">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li class="dropdown">
+        <a href="#">Pages</a>
+        <div class="dropdown-content">
+          <!-- This script will generate a list of HTML files in the folder and sub-folders -->
+          <script>
+            var files = [];
+            var folders = [];
+            var currentFolder = '.';
+            listFiles(currentFolder);
+
+            function listFiles(folder) {
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', folder + '/', true);
+              xhr.onload = function() {
+                if (xhr.status === 200) {
+                  var filesList = xhr.responseText.split('\n');
+                  filesList.forEach(function(file) {
+                    if (file.endsWith('.html')) {
+                      files.push(folder + '/' + file);
+                    } else if (file !== '' && file !== '.' && file !== '..') {
+                      folders.push(folder + '/' + file);
+                    }
+                  });
+                  folders.forEach(function(folder) {
+                    listFiles(folder);
+                  });
+                  generateMenu();
+                }
+              };
+              xhr.send();
+            }
+
+            function generateMenu() {
+              var menuHtml = '';
+              files.forEach(function(file) {
+                var fileName = file.replace(/^\./, '').replace('.html', '');
+                menuHtml += '<a href="' + file + '">' + fileName + '</a>';
+              });
+              document.querySelector('.dropdown-content').innerHTML = menuHtml;
+            }
+          </script>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- Add your content here -->
   <h1>Welcome to my GitHub Pages site!</h1>
   <p>This is a simple website hosted on GitHub Pages.</p>
 </body>
