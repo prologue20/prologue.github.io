@@ -1,103 +1,51 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
   <title>Videos</title>
-
   <style>
-
     /* Add some basic styling to the video list */
-
     .video-list {
-
       list-style: none;
-
       margin: 0;
-
       padding: 0;
-
     }
-
     .video-list li {
-
       margin-bottom: 20px;
-
     }
-
   </style>
-
 </head>
-
 <body>
-
   <h1>Videos</h1>
-
   <ul class="video-list" id="video-list">
-
     <!-- This script will generate a list of video files in the folder -->
-
     <script>
-
       var folder = '.';
-
       listVideos(folder);
-
-
       function listVideos(folder) {
-
         var xhr = new XMLHttpRequest();
-
         xhr.open('GET', folder + '/', true);
-
         xhr.onload = function() {
-
           if (xhr.status === 200) {
-
             var filesList = xhr.responseText.split('\n');
-
             filesList.forEach(function(file) {
-
               if (file.endsWith('.mp4') || file.endsWith('.webm') || file.endsWith('.ogg')) {
-
                 addVideoToList(file);
-
               }
-
             });
-
           }
-
         };
-
         xhr.send();
-
       }
-
-
       function addVideoToList(file) {
-
         var videoHtml = '<li>';
-
         videoHtml += '<video width="640" height="480" controls>';
-
         videoHtml += '<source src="' + file + '" type="video/' + file.split('.').pop() + '">';
-
         videoHtml += 'Your browser does not support the video tag.';
-
         videoHtml += '</video>';
-
         videoHtml += '</li>';
-
         document.getElementById('video-list').innerHTML += videoHtml;
-
       }
-
     </script>
-
   </ul>
-
 </body>
-
 </html>
